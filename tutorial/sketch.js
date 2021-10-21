@@ -32,22 +32,33 @@ function preload() {
     font = loadFont('fonts/Meiryo-01.ttf')
 }
 
-let bob
+let anchor, ball, spring
 let gravity
-let monosynth
 
 function setup() {
     createCanvas(640, 360)
     colorMode(HSB, 360, 100, 100, 100)
-    bob = new Particle(300, 100)
-    bob.vel = new p5.Vector(0, -10)
+    anchor = new Particle(400, 200)
+    ball = new Particle(200, 200)
+    spring = new Spring(0.005, 100, anchor, ball)
+
     gravity = new p5.Vector(0, 0.098)
 }
 
 function draw() {
     background(234, 34, 24)
+    //
+    // ball.apply_force(gravity)
 
-    bob.apply_force(gravity)
-    bob.update()
-    bob.show()
+    spring.show()
+    spring.daniel_update()
+    ball.show()
+    ball.update()
+    anchor.show()
+    anchor.update()
+
+    if (mouseIsPressed) {
+        ball.pos.set(mouseX, mouseY)
+        ball.vel.set(0, 0)
+    }
 }
