@@ -17,13 +17,15 @@ coding plan
 			pos, vel, acc
 		spring class ➜ constructor, update, show
 			a, b, k, rest_length
-	multiple spring and particle arrays
-	locked boolean for head to fix its position
-	gravity
+.   multiple spring and particle arrays
+.   locked boolean for head to fix its position
+.   gravity
 	use curvedVertex, noFill
 	mouse sets position of tail
 
 🐞 new objects need to be initialized in setup
+🐞 applied opposite forces to one end of the spring, cancelling out
+
 
  */
 let font
@@ -32,33 +34,54 @@ function preload() {
     font = loadFont('fonts/Meiryo-01.ttf')
 }
 
-let anchor, ball, spring
-let gravity
+let particles = []
+let springs = []
+let gravity = new p5.Vector(0, 0.0098)
+let k = 0.1
 
 function setup() {
     createCanvas(640, 360)
     colorMode(HSB, 360, 100, 100, 100)
-    anchor = new Particle(400, 200)
-    ball = new Particle(200, 200)
-    spring = new Spring(0.005, 100, anchor, ball)
 
-    gravity = new p5.Vector(0, 0.098)
+    let SPACING = 2
+    for (let i=0; i<100; i++) {
+        particles.push(new Particle(100+i*SPACING*2, 100, 2))
+        if (i!==0) {
+            let a = particles[i]
+            let b = particles[i-1]
+            springs.push(new Spring(k, SPACING, a, b))
+        }
+    }
+
+    // springs.push(new Spring(k, SPACING,
+    //     particles[0], particles[particles.length-1]))
+    particles[particles.length-1].pos.set(540, 100)
 }
 
 function draw() {
     background(234, 34, 24)
-    //
-    // ball.apply_force(gravity)
 
-    spring.show()
-    spring.daniel_update()
-    ball.show()
-    ball.update()
-    anchor.show()
-    anchor.update()
+    particles.forEach(p => {
+        p.apply_force(gravity)
+        p.update()
+        p.show()
+    })
+
+    springs.forEach(s => {
+        s.update()
+        s.show()
+    })
+
+    let head = particles[0]
+    head.locked = true
+
+    let tail = particles[particles.length-1]
+    tail.locked = true
+
+    let midpoint = particles[particles.length >> 1]
 
     if (mouseIsPressed) {
-        ball.pos.set(mouseX, mouseY)
-        ball.vel.set(0, 0)
+        midpoint.pos.set(mouseX, mouseY)
+        midpoint.vel.set(0, 0)
     }
 }
