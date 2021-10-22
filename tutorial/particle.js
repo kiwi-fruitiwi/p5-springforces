@@ -18,7 +18,8 @@ class Particle {
 
     /* add a small amount of friction */
     update() {
-        this.vel.mult(0.98)
+        let FRICTION = 0.99
+        this.vel.mult(FRICTION)
 
         // don't update our physics if we are locked
         if (!this.locked) {

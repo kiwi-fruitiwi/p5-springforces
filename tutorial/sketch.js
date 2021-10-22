@@ -20,8 +20,8 @@ coding plan
 .   multiple spring and particle arrays
 .   locked boolean for head to fix its position
 .   gravity
-	use curvedVertex, noFill
-	mouse sets position of tail
+.   use curvedVertex, noFill
+.   mouse sets position of tail
 
 🐞 new objects need to be initialized in setup
 🐞 applied opposite forces to one end of the spring, cancelling out
@@ -43,9 +43,9 @@ function setup() {
     createCanvas(640, 360)
     colorMode(HSB, 360, 100, 100, 100)
 
-    let SPACING = 2
-    for (let i=0; i<100; i++) {
-        particles.push(new Particle(100+i*SPACING*2, 100, 2))
+    let SPACING = 1
+    for (let i=0; i<50; i++) {
+        particles.push(new Particle(width/2, height/4+i*SPACING*3, 2))
         if (i!==0) {
             let a = particles[i]
             let b = particles[i-1]
@@ -55,17 +55,20 @@ function setup() {
 
     // springs.push(new Spring(k, SPACING,
     //     particles[0], particles[particles.length-1]))
-    particles[particles.length-1].pos.set(540, 100)
 }
 
 function draw() {
     background(234, 34, 24)
 
+    noFill()
+    beginShape()
     particles.forEach(p => {
         p.apply_force(gravity)
         p.update()
-        p.show()
+        vertex(p.pos.x, p.pos.y)
+        // p.show()
     })
+    endShape()
 
     springs.forEach(s => {
         s.update()
@@ -81,7 +84,7 @@ function draw() {
     let midpoint = particles[particles.length >> 1]
 
     if (mouseIsPressed) {
-        midpoint.pos.set(mouseX, mouseY)
-        midpoint.vel.set(0, 0)
+        tail.pos.set(mouseX, mouseY)
+        tail.vel.set(0, 0)
     }
 }
