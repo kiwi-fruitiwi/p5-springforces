@@ -30,16 +30,6 @@ class Spring {
         this.b.apply_force(force)
     }
 
-    daniel_update() {
-        let force = p5.Vector.sub(this.b.pos, this.a.pos);
-        let x = force.mag() - this.restLength;
-        force.normalize();
-        force.mult(this.k * x);
-        this.a.apply_force(force);
-        force.mult(-1);
-        this.b.apply_force(force);
-    }
-
     show() {
         strokeWeight(2)
         stroke(0, 0, 100, 70)

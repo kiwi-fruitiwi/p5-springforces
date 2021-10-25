@@ -29,6 +29,22 @@ class Particle {
         }
     }
 
+    edges() {
+        if (this.r + this.pos.y >= height) { // bottom edge
+            this.pos.y = height - this.r
+            this.vel.y *= -1
+        } else if (this.pos.y - this.r <= 0) {  // top edge
+            this.pos.y = this.r
+            this.vel.y *= -1
+        } else if (this.r + this.pos.x >= width) { // right edge
+            this.pos.x = width - this.r
+            this.vel.x *= -1
+        } else if (this.pos.x - this.r <= 0) {  // left edge
+            this.pos.x = this.r
+            this.vel.x *= -1
+        }
+    }
+
     apply_force(force) { /* force is a p5.Vector*/
         // F=ma, so a=F/m. we're cheekily ignoring the mass by assuming it's 1
         let applied_force = p5.Vector.div(force, this.mass)
